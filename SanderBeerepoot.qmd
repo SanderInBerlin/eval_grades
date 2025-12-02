@@ -9,6 +9,7 @@ library(vroom)
 library(ggplot2)
 library(dplyr)
 library(tidyr)
+library(readr)
 ```
 
 ```{r}
@@ -33,5 +34,43 @@ courses |>
          `number of exams` = nb_grades)|>
   arrange(Course_name)
 knitr::kable(formatted_courses)
+```
+```{r}
+students <- 
+  vroom(here("students.csv"))
+```
+to have group loaded as a factor and id as an integer.
+Question 3
+Load the student data set. Make sure the birth dates are correctly identified as Date objects by
+including the class of the corresponding column in the rendered text. For instance, include a
+sentence of the following form:
+The birth_date column of the students data frame is of class Date.
+Make also sure that the sex is identified as a factor.
+```{r}
+students_typed <- students |>
+  mutate(
+    birth_date = as.Date(birth_date, format = "%d-%m-%Y"),
+    group = as.factor(group),
+    sex = as.factor(sex),
+    id = as.integer(id)
+  )
+```
+
+```{r}
+grades <- vroom(here("grades.csv"))
+cols(
+  id = col_double(),
+  course_id = col_double(),
+  grade = col_double())
+```
+
+```{r}
+ok_grades <- read_delim(here("grades.csv"),
+  delim = "|"
+)
+cols(
+  id = col_double(),
+  course_id = col_double(),
+  grade = col_double())
 ```
 
