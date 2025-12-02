@@ -185,4 +185,33 @@ grades_with_module <- grades|>
   geom_boxplot()
 ```
 Question 13
+Compute the number of grades per student and include in your quarto rendering an extract of
+the resulting data frame. Make sure to keep in the data frame the id of the students but also
+their group and their sex. Include in the text a markdown table with the minimum, maximum,
+average and median number of grades per student.
+```{r}
+grades_per_student <- grades |>
+  group_by(id) |>
+  summarise(
+    nb_grades = n()
+  )
+
+students_with_grades_count <- students |>
+  left_join(grades_per_student, by = "id") |>
+  mutate(nb_grades = replace_na(nb_grades, 0))
+ students_with_grades_count |>
+  summarise(
+    Minimum = min(nb_grades),
+    Maximum = max(nb_grades),
+    Average = mean(nb_grades),
+    Median = median(nb_grades)
+  ) |>
+   pivot_longer(
+    cols = everything(),
+    names_to = "Metric",
+    values_to = "Number of Grades"
+  )|>
+  knitr::kable()
+```
+
 
