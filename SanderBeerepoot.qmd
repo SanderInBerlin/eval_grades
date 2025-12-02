@@ -82,4 +82,12 @@ students_typed |>
   ggplot(aes(x = n)) +
   geom_bar()
 ```
+ Question 6: Show the gender balance in each group on a single graphical representation.
+```{r}
+students_typed|>
+  ggplot(aes(x = group, fill = sex)) +
+  geom_bar(position = "fill")
+```
+
+
 
