@@ -270,5 +270,22 @@ grades_distribution <- students_course_grades_count |>
   ggplot(aes(x = nb_grades_course, y = nb_students)) +
   geom_col()
 ```
+Question 17: 
+```{r}
+course_id_target <=1
+grades_count_course <- grades |>
+  filter(course_id == course_id_target, !is.na(grade)) |>
+  group_by(id)|>
+  summarise(nb_grades_course = n())
+students_course_grades_count <- students |>
+  left_join(grades_count_course, by = "id") |>
+  mutate(nb_grades_course = replace_na(nb_grades_course, 0))
+ students_course_grades_count|>
+  ggplot(aes(x = as.factor(group), y = nb_grades_course,)) +
+  geom_violin() 
+```
+```{r}
+
+```
 
 
