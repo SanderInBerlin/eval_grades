@@ -174,5 +174,15 @@ avg_grades_by_group|>
 
 Question 12
 Compare graphically the distribution of the grades of the 2 modules.
-
+```{r}
+grades_with_module <- grades|>
+  filter(!is.na(grade))|>
+  
+  left_join(courses, by = "course_id") |>
+  mutate(module = as.factor(module))
+ grades_with_module|>
+  ggplot(aes(x = module, y = grade, fill = module)) +
+  geom_boxplot()
+```
+Question 13
 
