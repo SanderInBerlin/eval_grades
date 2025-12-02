@@ -3,6 +3,8 @@ title: "SanderBeerepoot"
 format: html
 ---
 
+link to github: https://github.com/SanderInBerlin/eval_grades.git
+
 ```{r}
 library(here)
 library(vroom)
@@ -142,10 +144,35 @@ number_of_grades <- grades |>
   ) |>
   pull(n)
 
-"The dataset contains `{r} number_of_grades` grades"
+"The dataset contains `{n} number_of_grades` grades"
 ```
 The value is shown in the values part of the global environment
 
+Question 11
 
+Question 11
+Compute the average of all the grades in Neurotechnology and Mind Control in each group and
+display graphically this average as a function of the group. It is recommend to use geom_col()
+for this task (read the documentation!).
+
+```{r}
+course_id_neurotech <- courses |>
+  filter(course == "Neurotechnology and Mind Control") |>
+  pull(course_id)
+
+avg_grades_by_group <- grades |>
+  filter(course_id == course_id_neurotech) |>
+  left_join(students, by = "id") |>
+  group_by(group)|>
+  summarise(
+    avg_grade = mean(grade, na.rm = TRUE))
+
+avg_grades_by_group|>
+  ggplot(aes(y = avg_grade, x = group)) +
+  geom_col()
+```
+
+Question 12
+Compare graphically the distribution of the grades of the 2 modules.
 
 
