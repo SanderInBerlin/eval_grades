@@ -355,5 +355,64 @@ course_y_id <- "9"
   
   theme_minimal()
 ```
+Question 21: 
+The cor() function computes the correlation coeﬀicient between two vectors. It can be used
+as a summary function in dplyr. Using it, compute the correlation between the average grades
+in Post-Human Philosophy and Ethics and the average grades in Hacking and Network Security
+group by group.
 
+```{r}
+avg_grades_long <- grades |>
+  left_join(students, by = "id") |>
+  group_by(id, group, course_id) |>
+  summarise(
+    avg_grade = mean(grade, na.rm = TRUE)
+  )
+
+
+students_avg_grades_pivoted2 <- avg_grades_long|>
+  pivot_wider(
+    id_cols = c(id, group),   
+    names_from = course_id,
+    values_from = avg_grade
+  ) |>
+  rename_with(~ paste0("C", .x), .cols = matches("^[0-9]+$"))
+
+students_avg_grades_pivoted2 |>
+  group_by(group) |>
+  summarise(
+    correlation_coefficient = cor(`C10`, `C2`, use = "complete.obs")
+  ) |>
+  rename(`Correlation (C10 vs. C2)` = correlation_coefficient)
+```
+Question 22: Display the average grades in Post-Human Philosophy and Ethics as a function the average
+grades in Hacking and Network Security for the students of the group in which those grades are
+the most correlated (positively or negatively).
+
+```{r}
+course_x_id <- "2" 
+course_y_id <- "10" 
+correlation_by_group <- students_avg_grades_pivoted2 |>
+  group_by(group) |>
+  summarise(
+    correlation_coefficient = cor(`C10`, `C2`, use = "complete.obs")
+  )
+target_group_row <- correlation_by_group |>
+  mutate(abs_corr = abs(correlation_coefficient))|>
+  slice_max(abs_corr, n = 1)
+
+target_group <- as.integer(target_group_row$group)
+target_corr <- target_group_row$correlation_coefficient
+
+df_target <- students_avg_grades_pivoted2 |>
+  filter(group == target_group)
+course_names <- vroom(here("courses.csv"))
+course_x_name <- course_names |> filter(course_id == 2) |> pull(course)
+course_y_name <- course_names |> filter(course_id == 10) |> pull(course)
+
+df_target |>
+  ggplot(aes(x = `C2`, y = `C10`)) +
+  geom_point(alpha = 0.8, size = 3, color = "darkblue") +
+  geom_smooth(method = "lm", se = TRUE, color = "red", linewidth = 1) 
+```
 
