@@ -111,4 +111,18 @@ students_age |>
   group_by(group)|>
   summarise(median = median(age_years))
 ```
+Question 9: Build a table with the id, sex and age of the oldest student in each group. Sort the table by
+decreasing age order and include it in the rendering.
+```{r}
+
+val_per_oldest <- students_age |>
+  group_by(group)|>
+  slice_max(age_years, n = 1, with_ties = TRUE) |>
+  ungroup() |>
+  
+  select(id, sex, group, Age_Years = age_years) |>
+  arrange(desc(Age_Years))
+val_per_oldest|>
+  knitr::kable()
+```
 
