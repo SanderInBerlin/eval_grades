@@ -10,6 +10,7 @@ library(ggplot2)
 library(dplyr)
 library(tidyr)
 library(readr)
+library(lubridate)
 ```
 
 ```{r}
@@ -89,5 +90,17 @@ students_typed|>
   geom_bar(position = "fill")
 ```
 
+Question 7
+Show graphically the distribution of the age of the students.
 
+```{r}
+students|>
+  mutate(age_years = as.numeric(Sys.Date() - birth_date) / 365.25)
+students |>
+ggplot(aes(x = as.numeric(Sys.Date() - birth_date) / 365.25)) +
+  geom_density()
+  
+
+```
+Question 8
 
