@@ -214,4 +214,18 @@ students_with_grades_count <- students |>
   knitr::kable()
 ```
 
+Question 14: 
+Compare graphically the distribution of the number of grades for female and male students.
 
+```{r}
+students_with_grades_count <- grades |>
+  group_by(id) |>
+  summarise(
+    nb_grades = n()
+  ) |>
+  left_join(students, by = "id") |>
+  mutate(nb_grades = replace_na(nb_grades, 0))
+ students_with_grades_count |>
+  ggplot(aes(x = nb_grades, fill = sex)) +
+  geom_density(alpha = 0.5)
+```
