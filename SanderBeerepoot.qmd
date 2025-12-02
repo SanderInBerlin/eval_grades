@@ -415,4 +415,28 @@ df_target |>
   geom_point(alpha = 0.8, size = 3, color = "darkblue") +
   geom_smooth(method = "lm", se = TRUE, color = "red", linewidth = 1) 
 ```
+Question 23: Let us assume that the final grade of a student is the average of the averages of their grades for
+each course. Create a data frame with four columns, id, group, sex and final grade based on
+this definition for the last column. Sort the data frame in decrease order of final grade and
+include in the quarto rendering its first five rows.
+
+```{r}
+df_avg_course_grade <- grades |>
+  group_by(id, course_id) |>
+  summarise(
+    avg_course_grade = mean(grade, na.rm = TRUE))
+
+df_final_grade <- df_avg_course_grade|>
+  group_by(id) |>
+  summarise(
+    final_grade = mean(avg_course_grade, na.rm = TRUE)
+  )
+
+ students |>
+  select(id, group, sex) |>
+  left_join(df_final_grade, by = "id")|>
+  arrange(desc(final_grade))|>
+   slice_head(n = 5)|>
+   knitr::kable()
+```
 
