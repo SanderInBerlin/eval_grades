@@ -19,3 +19,19 @@ here::i_am("eval_grades.Rproj")
 courses <- vroom(here("courses.csv"))
 ```
 
+Question 2
+Display the content of the file in a nicely formatted table in your document. Courses should be
+sorted in alphabetical order and column names should be written in English. This has to be
+done in R for instance using knitr::kable().
+
+```{r}
+formatted_courses <-
+courses |>
+  rename(Course_name = course,
+         identifier = course_id,
+         module = module,
+         `number of exams` = nb_grades)|>
+  arrange(Course_name)
+knitr::kable(formatted_courses)
+```
+
