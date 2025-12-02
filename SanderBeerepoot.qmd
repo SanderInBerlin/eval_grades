@@ -1,0 +1,21 @@
+---
+title: "SanderBeerepoot"
+format: html
+---
+
+```{r}
+library(here)
+library(vroom)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+```
+
+```{r}
+here::i_am("eval_grades.Rproj")
+```
+
+```{r}
+courses <- vroom(here("courses.csv"))
+```
+
