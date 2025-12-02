@@ -49,7 +49,7 @@ Make also sure that the sex is identified as a factor.
 ```{r}
 students_typed <- students |>
   mutate(
-    birth_date = as.Date(birth_date, format = "%d-%m-%Y"),
+    birth_date = as.Date(birth_date, format = "%Y-%m-%d"),
     group = as.factor(group),
     sex = as.factor(sex),
     id = as.integer(id)
@@ -63,6 +63,7 @@ cols(
   course_id = col_double(),
   grade = col_double())
 ```
+Question 4
 
 ```{r}
 ok_grades <- read_delim(here("grades.csv"),
@@ -72,5 +73,13 @@ cols(
   id = col_double(),
   course_id = col_double(),
   grade = col_double())
+```
+Question 5: Use a graphical representation to display the number of students per group.
+```{r}
+students_typed |>
+  group_by(group)|>
+  summarise(n = n())|>
+  ggplot(aes(x = n)) +
+  geom_bar()
 ```
 
