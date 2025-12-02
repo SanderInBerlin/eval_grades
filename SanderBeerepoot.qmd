@@ -284,8 +284,15 @@ students_course_grades_count <- students |>
   ggplot(aes(x = as.factor(group), y = nb_grades_course,)) +
   geom_violin() 
 ```
-```{r}
+Question 18
+Take the analysis of the previous question one step further to see if there is a dependency of the
+number of grades with respect to both the group and the sex of the students.
 
+```{r}
+ students_course_grades_count|>
+  ggplot(aes(x = as.factor(group), y = nb_grades_course)) +
+  geom_violin() +
+  facet_wrap(vars(sex))
 ```
 
 
