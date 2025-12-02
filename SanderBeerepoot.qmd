@@ -94,13 +94,21 @@ Question 7
 Show graphically the distribution of the age of the students.
 
 ```{r}
-students|>
+students_age <- students|>
   mutate(age_years = as.numeric(Sys.Date() - birth_date) / 365.25)
-students |>
-ggplot(aes(x = as.numeric(Sys.Date() - birth_date) / 365.25)) +
+students_age |>
+ggplot(aes(x = age_years)) +
   geom_density()
   
 
 ```
 Question 8
+Compute the median age of the students in each group and include in your rendering a table
+giving the median age for each group. The median should be reported as an integer.
+
+```{r}
+students_age |>
+  group_by(group)|>
+  summarise(median = median(age_years))
+```
 
