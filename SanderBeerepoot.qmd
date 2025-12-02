@@ -229,3 +229,26 @@ students_with_grades_count <- grades |>
   ggplot(aes(x = nb_grades, fill = sex)) +
   geom_density(alpha = 0.5)
 ```
+Question 15:
+Create a data frame that gives for each student their id, their group and the number of grades
+they obtained in Cybernetic Implants and Augmentations and include in the quarto rendering a
+small extract of the result.
+
+```{r}
+course_id_target <- 1 
+
+grades_count_course <- grades |>
+  filter(course_id == course_id_target, !is.na(grade))|>
+  group_by(id) |>
+  summarise(
+    nb_grades_course = n(),
+    .groups = 'drop'
+  )
+
+students |>
+  left_join(grades_count_course, by = "id") |>
+  mutate(nb_grades_course = replace_na(nb_grades_course, 0)) |>
+  slice_head(n = 5)|>
+    knitr::kable()
+```
+
