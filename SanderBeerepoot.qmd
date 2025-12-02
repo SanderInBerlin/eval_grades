@@ -317,7 +317,7 @@ students_avg_grades_pivoted <- avg_grades_long|>
     values_from = avg_grade
   )
   
-students_avg_grades_pivoted |>
+students_avg_grades_pivoted|>
   slice_head(n = 5)|>
   knitr::kable()
 ```
