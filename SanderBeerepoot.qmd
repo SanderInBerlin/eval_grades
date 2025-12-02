@@ -463,3 +463,38 @@ Quetsion 25: Include in the analysis conducted in the previous question the effe
   geom_boxplot() +
    facet_wrap(vars(sex))
 ```
+Question 26: To pass the year, a student must fulfil the following conditions:
+• have no average grade in a course lower than 5;
+7
+• have an average grade in each module larger or equal to 10 (the average in a module is
+simply the average of the average grades of the courses in the module).
+Create a data frame that gives for each student their id, their group, their final grade (as
+defined before) and a pass variable equal to TRUE if the student pass the year (and FALSE if they
+do not).
+
+
+```{r}
+df_pass_c1 <- df_avg_course_grade |>
+  group_by(id) |>
+  summarise(pass_c1 = min(avg_course_grade, na.rm = TRUE) >= 5)
+df_module_avg_grades <- df_avg_course_grade |>
+  left_join(courses |> select(course_id, module), by = "course_id")
+
+df_module_avg <- df_module_avg_grades |>
+  group_by(id, module) |>
+  summarise(avg_module_grade = mean(avg_course_grade, na.rm = TRUE))
+
+df_pass_c2 <- df_module_avg|>
+  group_by(id) |>
+  summarise(pass_c2 = min(avg_module_grade, na.rm = TRUE) >= 10)
+
+df_final_pass <- students |>
+  select(id, group, sex)|>
+  left_join(df_final_grade, by = "id") |>
+  left_join(df_pass_c1, by = "id") |>
+  left_join(df_pass_c2, by = "id") |>
+  mutate(pass = pass_c1 & pass_c2) |>
+  select(id, group, final_grade, pass)
+print(df_final_pass)
+```
+
