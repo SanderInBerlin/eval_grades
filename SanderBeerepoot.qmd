@@ -439,4 +439,27 @@ df_final_grade <- df_avg_course_grade|>
    slice_head(n = 5)|>
    knitr::kable()
 ```
-
+question 24: 
+Find a way to study differences in final grades between groups.
+```{r}
+ df_final <- students |>
+  select(id, group, sex) |>
+  left_join(df_final_grade, by = "id")|>
+  arrange(desc(final_grade))
+ df_final |>
+  ggplot(aes(x = as.factor(group), y = final_grade)) +
+  
+  geom_boxplot(
+  )
+```
+Quetsion 25: Include in the analysis conducted in the previous question the effect of sex.
+```{r}
+ df_final <- students |>
+  select(id, group, sex) |>
+  left_join(df_final_grade, by = "id")|>
+  arrange(desc(final_grade))
+ df_final |>
+  ggplot(aes(x = as.factor(group), y = final_grade)) +
+  geom_boxplot() +
+   facet_wrap(vars(sex))
+```
