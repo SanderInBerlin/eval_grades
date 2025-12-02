@@ -322,4 +322,38 @@ students_avg_grades_pivoted |>
   knitr::kable()
 ```
 
+Question 20: 
+Show the average grades in Corporate Espionage and Industrial Sabotage as a function of the
+average grades in Urban Planning and Megacity Design. Make sure to maximise the readability
+of the proposed representation.
+
+```{r}
+avg_grades_long <- grades |>
+  group_by(id, course_id) |>
+  summarise(
+    avg_grade = mean(grade, na.rm = TRUE)
+  )
+
+students_avg_grades_pivoted <- avg_grades_long |>
+  pivot_wider(
+    id_cols = id,
+    names_from = course_id,
+    values_from = avg_grade
+  )
+
+course_x_id <- "7"
+course_y_id <- "9" 
+ students_avg_grades_pivoted |>
+  ggplot(aes(x = `7`, y = `9`)) +
+  geom_point(alpha = 0.6, size = 2) +
+  geom_smooth(method = "lm", se = TRUE, color = "red", linewidth = 1) +
+  labs(
+    title = paste("Average Grades: Corporate Espionage (Y) vs. Urban Planning (X)"),
+    x = "Average Grade in Urban Planning and Megacity Design (Course 7)",
+    y = "Average Grade in Corporate Espionage and Industrial Sabotage (Course 9)"
+  ) +
+  
+  theme_minimal()
+```
+
 
