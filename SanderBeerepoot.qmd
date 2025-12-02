@@ -125,4 +125,27 @@ val_per_oldest <- students_age |>
 val_per_oldest|>
   knitr::kable()
 ```
+3 Simple grade analysis
+
+Question 10
+
+Give the number of grades in the data set directly in the text of your quarto file, in a sentence
+of the form “The data set contains xxx grades.” where xxx is replaced by the number of grades.
+This must be computed from the data set. Note that missing grades should obviously not be
+included in the total.
+
+```{r}
+number_of_grades <- grades |>
+  filter(!is.na(grade)) |>
+  summarise(
+    n = n()
+  ) |>
+  pull(n)
+
+"The dataset contains `{r} number_of_grades` grades"
+```
+The value is shown in the values part of the global environment
+
+
+
 
