@@ -244,11 +244,31 @@ grades_count_course <- grades |>
     nb_grades_course = n(),
     .groups = 'drop'
   )
-
-students |>
+ students |>
   left_join(grades_count_course, by = "id") |>
   mutate(nb_grades_course = replace_na(nb_grades_course, 0)) |>
-  slice_head(n = 5)|>
+   slice_head(n = 5) |>
     knitr::kable()
 ```
+Question 16: Compute from the previous data frame the distribution of the number of grades, that is for each
+number of grades (e.g. 10) the number of students who have exactly this number of grades in
+Cybernetic Implants and Augmentations. Represent graphically the results.
+
+```{r}
+students_course_grades_count <- grades |>
+  filter(course_id == course_id_target, !is.na(grade)) |>
+  group_by(id) |>
+  summarise(nb_grades_course = n(), .groups = 'drop') |>
+  left_join(students, by = "id") |>
+  mutate(nb_grades_course = replace_na(nb_grades_course, 0))
+
+grades_distribution <- students_course_grades_count |>
+  count(nb_grades_course, name = "nb_students") |>
+  mutate(nb_grades_course = as.factor(nb_grades_course)) 
+
+ grades_distribution |>
+  ggplot(aes(x = nb_grades_course, y = nb_students)) +
+  geom_col()
+```
+
 
